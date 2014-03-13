@@ -1,0 +1,29 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Editor files
+*.sublime-project
+*.sublime-workspace
+*.idea
+*.iml
+
+*.log
+.classpath
+.project
+.settings/
+target/
+logs/
+out/
+
+.DS_Store
+
+# Images
+images-equalized/
+images-unequalized/
+
+# API keys
+scripts/api_properties.py
