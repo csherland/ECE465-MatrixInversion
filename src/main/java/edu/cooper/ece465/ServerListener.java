@@ -4,7 +4,7 @@
  *  and stores information on the server within the specified
  *  priority queue and hashmap.
  *
- *  Listens for new histrogram server connections on the port specified
+ *  Listens for new matrix inversion server connections on the port specified
  *  by portNumber.
  *
  *  @author Christian Sherland
