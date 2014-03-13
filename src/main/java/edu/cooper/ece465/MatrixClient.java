@@ -14,6 +14,8 @@
 
 package edu.cooper.ece465;
 
+import java.io.*;
+import java.net.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -23,21 +25,64 @@ public class MatrixClient {
 
     public static void main(String[] args){
 
-        if (args.length != 2) {
-            LOG.fatal("Usage: java MatrixClient <input file> <output file>");
+        final String INPUT_FILE    = args[2];
+        final String OUTPUT_FILE   = args[3];
+        final String LOAD_BALANCER_NAME = args[0];
+        final int LOAD_BALANCER_PORT    = Integer.parseInt(args[1]);
+
+        LOG.info("Image client running with load balancer name:\t "
+                + LOAD_BALANCER_NAME + "\n\t\t port: "
+                + LOAD_BALANCER_PORT + "\n\t\t input file: "
+                + INPUT_FILE + "\n\t\t output file: "
+                + OUTPUT_FILE);
+
+
+        // Get server info from the load balancer
+        String histServerName = null;
+        Integer histServerPort = null;
+
+        try {
+            LOG.info("Getting server assignment from load balancer.");
+            Socket socket = new Socket(LOAD_BALANCER_NAME, LOAD_BALANCER_PORT);
+            ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+
+            histServerName = (String) input.readObject();
+            histServerPort = (Integer) input.readObject();
+
+            input.close();
+            socket.close();
+        } catch (IOException e) {
+            LOG.fatal("Socket failed to initialize.");
+            System.exit(1);
+        } catch (ClassNotFoundException e) {
+            LOG.fatal("ClassNotFoundException.", e);
             System.exit(1);
         }
 
-        final String INPUT_FILE  = args[0];
-        final String OUTPUT_FILE = args[1];
+        // Connect to the server and have matrices equalized
+        try {
+            LOG.info("Connecting to histogram server: " + histServerName + " on port: " + histServerPort);
+            Socket socket = new Socket(histServerName, histServerPort);
 
-        // Read data from input file
+            Thread matWriter = new Thread(new MatrixClientWriter(socket, INPUT_DIRECTORY));
+            Thread matReader = new Thread(new MatrixClientReader(socket, OUTPUT_DIRECTORY, numImgs));
 
+            matWriter.start();
+            matReader.start();
 
-        // Get server info from load balancer
+            matWriter.join();
+            matReader.join();
 
-
-        // Write results to output file
-
+            socket.close();
+        } catch (UnknownHostException e) {
+            LOG.fatal("Unknown host", e);
+            System.exit(1);
+        } catch (IOException e) {
+            LOG.fatal("IO exception", e);
+            System.exit(1);
+        } catch (Exception e) {
+            LOG.fatal("Unexpected exception", e);
+            System.exit(1);
+        }
     }
 }
