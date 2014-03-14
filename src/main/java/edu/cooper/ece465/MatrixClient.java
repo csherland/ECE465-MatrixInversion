@@ -25,8 +25,8 @@ public class MatrixClient {
 
     public static void main(String[] args){
 
-        final String INPUT_FILE    = args[2];
-        final String OUTPUT_FILE   = args[3];
+        final String INPUT_FILE  = args[2];
+        final String OUTPUT_FILE = args[3];
         final String LOAD_BALANCER_NAME = args[0];
         final int LOAD_BALANCER_PORT    = Integer.parseInt(args[1]);
 
@@ -38,7 +38,7 @@ public class MatrixClient {
 
 
         // Get server info from the load balancer
-        String histServerName = null;
+        String histServerName  = null;
         Integer histServerPort = null;
 
         try {
@@ -46,6 +46,7 @@ public class MatrixClient {
             Socket socket = new Socket(LOAD_BALANCER_NAME, LOAD_BALANCER_PORT);
             ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 
+            // Receive assignment
             histServerName = (String) input.readObject();
             histServerPort = (Integer) input.readObject();
 
@@ -64,15 +65,17 @@ public class MatrixClient {
             LOG.info("Connecting to histogram server: " + histServerName + " on port: " + histServerPort);
             Socket socket = new Socket(histServerName, histServerPort);
 
+            // Start reader and writer
             Thread matWriter = new Thread(new MatrixClientWriter(socket, INPUT_DIRECTORY));
             Thread matReader = new Thread(new MatrixClientReader(socket, OUTPUT_DIRECTORY, numImgs));
-
             matWriter.start();
             matReader.start();
 
+            // Wait for both to finish
             matWriter.join();
             matReader.join();
 
+            // Close connection
             socket.close();
         } catch (UnknownHostException e) {
             LOG.fatal("Unknown host", e);

@@ -39,11 +39,15 @@ public class MatrixServerWorker implements Runnable {
             int matrixCount = (Integer) input.readObject();
             LOG.info("Expecting " + matrixCount + " images from client.");
 
+            // Synchronized buffer to store data in
+            ArrayList<Matrix> matBuffer = new ArrayList<Matrix>();
+            Collections.synchronizedList(matBuffer);
+
             // Keep track of threads
             ArrayList<Thread> threads = new ArrayList<Thread>();
 
             // Make the send back thread
-            MatrixWorkerWriter writer = new MatrixWorkerWriter(output, matrixCount);
+            MatrixWorkerWriter writer = new MatrixWorkerWriter(output, matrixCount, matBuffer);
             Thread writerThread = new Thread(writer);
             threads.add(writerThread);
             writerThread.start();

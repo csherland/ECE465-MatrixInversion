@@ -33,6 +33,23 @@ public class MatrixClientWriter implements Runnable {
 
     @Override
     public void run() {
+        try {
+            // Open input file and stream to server
+            File[] files = new File(inFile);
+            ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 
+            // Write data to server
+            for (int i = 0; i < files.length; i++) {
+                Matrix inputMat = new Matrix();
+                output.writeObject(inputMat);
+            }
+
+        } catch (IOException e) {
+            LOG.fatal("IO exception", e);
+            System.exit(1);
+        } catch (Exception e) {
+            LOG.fatal("Unexpected exception", e);
+            System.exit(1);
+        }
     }
 }

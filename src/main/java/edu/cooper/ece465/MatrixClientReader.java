@@ -33,6 +33,29 @@ public class MatrixClientReader implements Runnable {
 
     @Override
     public void run() {
+        try {
+            // Create output file
+            File file = new File(outputFile);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
 
+            // Wait for inverted matrices from Server
+            LOG.info("Waiting for inverted matrices");
+            ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+
+            for (int i = 0; i < numImgs; i++) {
+                // Get result and write output
+                Matrix invertedMat = (Matrix) input.readObject();
+
+            }
+
+        } catch (IOException e) {
+            LOG.fatal("IO exception", e);
+            System.exit(1);
+        } catch (Exception e) {
+            LOG.fatal("Unexpected exception", e);
+            System.exit(1);
+        }
     }
 }
