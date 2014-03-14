@@ -16,11 +16,15 @@
 
 package edu.cooper.ece465;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.PriorityQueue;
 
 public class ServerListener implements Runnable {
 
@@ -32,9 +36,9 @@ public class ServerListener implements Runnable {
 
     public ServerListener(PriorityQueue<ServerStatus> queue, HashMap<String, ServerStatus> hm, int portNumber) throws IOException {
         LOG.info("Creating new server listener.");
-        this.queue   = queue;
+        this.queue = queue;
         this.hashMap = hm;
-        this.port    = portNumber;
+        this.port = portNumber;
         this.serverSocket = new ServerSocket(portNumber);
     }
 
@@ -47,7 +51,7 @@ public class ServerListener implements Runnable {
 
             // Get server status
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-            ServerStatus status   = (ServerStatus) ois.readObject();
+            ServerStatus status = (ServerStatus) ois.readObject();
 
             // If the server is in the queue, remove it (so it is updated on add)
             String key = status.getKey();
