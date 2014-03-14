@@ -34,7 +34,7 @@ public class MatrixWorkerInverter implements Runnable {
     public void run() {
         // TODO: If number of dimensions is less than number of THREAD
 
-        for (int pivot = 0; pivot < dimension - 1; pivot++) {
+        for (int pivot = 0; pivot < dimension; pivot++) {
             double pivotValue = matrix.retrieve(pivot, pivot);
             int swappableRow = 1 + pivot;
 
@@ -65,7 +65,7 @@ public class MatrixWorkerInverter implements Runnable {
                 currentReducer.start();
             }
 
-            for (Thread thread: listThreads){
+            for (Thread thread : listThreads) {
                 try {
                     thread.join();
                 } catch (InterruptedException e) {
@@ -94,7 +94,7 @@ public class MatrixWorkerInverter implements Runnable {
                 currentReducer.start();
             }
 
-            for (Thread thread: listThreads){
+            for (Thread thread : listThreads) {
                 try {
                     thread.join();
                 } catch (InterruptedException e) {
