@@ -21,15 +21,35 @@ public class MatrixWorkerWriter implements Runnable {
 
     private ObjectOutputStream output;
     private int matCount;
+    private ArrayList<Matrix> matBuffer;
     private static Log LOG = LogFactory.getLog(MatrixWorkerWriter.class);
 
-    public MatrixWorkerWriter(ObjectOutputStream o, int count) {
+    public MatrixWorkerWriter(ObjectOutputStream o, int count, ArrayList<Matrix> matBuffer) {
         LOG.info("New MatrixWorkerWriter created.");
-        this.output   = o;
-        this.matCount = count;
+        this.output = o;
+        this.matCount  = count;
+        this.matBuffer = matBuffer;
     }
 
     @Override
     public void run() {
+        for(int sentBack = 0; sentBack < matCount; sentBack++) {
+            try {
+                if(!matBuffer.isEmpty()) {
+                    Matrix sendBack = matBuffer.get(0);
+                    matBuffer.remove(0);
+                    output.writeObject(sendBack);
+                    LOG.info("Sent back matrix" + (sentBack+1));
+                } else {
+                    Thread.sleep(1000);
+                }
+            } catch (Exception e) {
+                LOG.error("Unexpected exception", e);
+            }
+        }
+
+        try {
+            Thread.sleep(5000);
+        } catch (Exception e) {}
     }
 }
