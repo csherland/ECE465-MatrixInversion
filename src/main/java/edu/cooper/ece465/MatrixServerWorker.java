@@ -1,5 +1,8 @@
 /**
  * MatrixServerWorker.java
+ *    A Worker thread for the MatrixServer. Listens for new data from client and
+ *    sends back inverted matrices simultaneously. Spawns a new MatrixInverter
+ *    thread for each matrix to be inverted and controls threads with a thread pool.
  *
  *  @author Christian Sherland
  *  @author Ethan Lusterman
@@ -61,6 +64,7 @@ public class MatrixServerWorker implements Runnable {
                 threads.get(i).start();
             }
 
+            // Wait for everything to finish before ending communication
             for (Thread thread : threads) {
                 thread.join();
             }

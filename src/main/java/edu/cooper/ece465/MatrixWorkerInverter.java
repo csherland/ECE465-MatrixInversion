@@ -1,5 +1,9 @@
 /**
  * MatrixWorkerInverter.java
+ *    A child thread of the MatrixServerWorker that actually performs the matrix
+ *    inversion. Does so through a parallel algorithm which spawns at most 4
+ *    new threads for matrix inversion. Stores the resulting inverted matrix in
+ *    the outputBuffer so that it can be sent back to the client.
  *
  *  @author Christian Sherland
  *  @author Ethan Lusterman
@@ -20,9 +24,9 @@ public class MatrixWorkerInverter implements Runnable {
     private Matrix matrix;
     private int dimension;
     private static final int THREADS = 4;
+    private static final int UPPER_TRIANGULAR = 0;
+    private static final int GAUSS_JORDAN_ELIMINATE = 1;
     private static Log LOG = LogFactory.getLog(MatrixWorkerInverter.class);
-    private final int UPPER_TRIANGULAR = 0;
-    private final int GAUSS_JORDAN_ELIMINATE = 1;
 
     public MatrixWorkerInverter(Matrix matrix, int dimension) {
         LOG.info("New MatrixWorkerInverter created.");
@@ -30,13 +34,29 @@ public class MatrixWorkerInverter implements Runnable {
         this.dimension = dimension;
     }
 
+    /**
+     * Waits for all threads specified in listThreads to join this process before
+     * continuing execution.
+     *
+     * @param listThreads    The list of threads to join with this process
+     */
+    private void joinThreads(ArrayList<Thread> listThreads) {
+        for (Thread thread : listThreads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                LOG.error("Error joining thread.", e);
+            }
+        }
+    }
+
     @Override
     public void run() {
-        // TODO: If number of dimensions is less than number of THREAD
 
+        // Make the matrix upper triangular
         for (int pivot = 0; pivot < dimension; pivot++) {
             double pivotValue = matrix.retrieve(pivot, pivot);
-            int swappableRow = 1 + pivot;
+            int swappableRow  = 1 + pivot;
 
             // Make sure the pivotValue is non-zero, swap rows until this is the case
             while (pivotValue == 0) {
@@ -50,12 +70,9 @@ public class MatrixWorkerInverter implements Runnable {
                 matrix.scaleRow(pivot, (1 / pivotValue));
             }
 
-            int innerBlockDimension = dimension - (pivot + 1);
-            int numberThreads = THREADS; // If small sub-matrix, don't create all threads
-
-            if (innerBlockDimension < THREADS) {
-                numberThreads = innerBlockDimension;
-            }
+            // If matrix is small, don't create a lot of threads
+            int innerBlockDim = dimension - (pivot + 1);
+            int numberThreads = (innerBlockDim < THREADS) ? THREADS : innerBlockDim;
 
             ArrayList<Thread> listThreads = new ArrayList<Thread>();
             for (int threadNumber = 0; threadNumber < numberThreads; threadNumber++) {
@@ -65,27 +82,16 @@ public class MatrixWorkerInverter implements Runnable {
                 currentReducer.start();
             }
 
-            for (Thread thread : listThreads) {
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+            joinThreads(listThreads); // Wait for all threads to complete
         }
 
-        // At this point we have an upper triangular matrix.
-
+        // Make the upper triangular matrix lower triangular (diagonal)
         for (int pivot = dimension - 1; pivot > 0; pivot--) {
             // This time we know the pivot values as we have defined them are 1, can skip some steps.
+            int innerBlockDim = pivot;
+            int numberThreads = (innerBlockDim < THREADS) ? THREADS : innerBlockDim;
 
-            int innerBlockDimension = pivot;
-            int numberThreads = THREADS; // If small sub-matrix, don't create all threads
-
-            if (innerBlockDimension < THREADS) {
-                numberThreads = innerBlockDimension;
-            }
-
+            // Perform diagonalization
             ArrayList<Thread> listThreads = new ArrayList<Thread>();
             for (int threadNumber = 0; threadNumber < numberThreads; threadNumber++) {
                 Runnable reducer = new InverterThread(matrix, (pivot - 1 - threadNumber), dimension, pivot, GAUSS_JORDAN_ELIMINATE);
@@ -94,13 +100,7 @@ public class MatrixWorkerInverter implements Runnable {
                 currentReducer.start();
             }
 
-            for (Thread thread : listThreads) {
-                try {
-                    thread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+            joinThreads(listThreads); // Wait for all threads to complete
         }
     }
 }

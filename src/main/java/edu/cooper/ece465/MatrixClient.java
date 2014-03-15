@@ -1,9 +1,8 @@
 /**
  * MatrixClient.java
- *  Sends invertible matrices specified in the input
- *  file command line argument to a server and waits
- *  to read back inverted results. Saves results to
- *  the output file specified as a command line argument.
+ *  Sends invertible matrices specified in the input file command line argument
+ *  to a server and waits to read back inverted results. Saves results to the
+ *  output file specified as a command line argument.
  *
  * @author Christian Sherland
  * @author Michael Scibor

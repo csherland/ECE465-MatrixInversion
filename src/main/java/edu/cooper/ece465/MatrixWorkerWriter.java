@@ -1,6 +1,6 @@
 /**
  * MatrixWorkerWriter.java
- *    Checks the buffer for inverted matrices and writes data back to client
+ *    Checks the data buffer for inverted matrices and writes data back to client
  *    that requested the inversion.
  *
  *  @author Christian Sherland
@@ -59,6 +59,6 @@ public class MatrixWorkerWriter implements Runnable {
         } catch (Exception e) {
             LOG.error("Thread.sleep(5000) failed.")
         }
-        
+
     }
 }

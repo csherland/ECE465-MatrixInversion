@@ -1,5 +1,7 @@
 /**
  * MatrixServer.java
+ *    A server that accepts incoming connections from clients and spawns a worker
+ *    to handle matrix inversion of input data from client.
  *
  *  @author Christian Sherland
  *  @author Ethan Lusterman
@@ -69,6 +71,8 @@ public class MatrixServer {
         } catch (InterruptedException e) {
             LOG.error("Thread sleep error.", e);
         }
+
+        // Cleanup
         executorPool.shutdown();
         monitor.shutdown();
 

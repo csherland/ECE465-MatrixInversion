@@ -64,7 +64,7 @@ public class Matrix implements Serializable {
      */
     public double retrieve(int row, int col) {
         if ((row > dimension) || (col > dimension)) {
-            throw
+            throw new IndexOutOfBoundsException("Error retriving element.");
         }
 
         return matrix[row][col];
@@ -81,7 +81,7 @@ public class Matrix implements Serializable {
     // Swap two rows in the matrix
     public void swapRow(int firstRow, int secondRow) {
         if ((firstRow >= dimension) || (secondRow >= dimension)) {
-            throw IndexOutOfBounds;
+            throw new IndexOutOfBoundsException("Error swapping rows.");
         }
 
         double tempRow[] = matrix[firstRow];
@@ -98,7 +98,7 @@ public class Matrix implements Serializable {
      */
     public void scaleRow(int row, double scale) {
         if (row >= dimension) {
-            throw IndexOutOfBounds;
+            throw new IndexOutOfBoundsException("Error scaling row");
         }
 
         for (int i = 0; i < 2 * dimension; i++) {
@@ -117,7 +117,7 @@ public class Matrix implements Serializable {
      */
     public void addRow(int firstRow, int secondRow, double scale) {
         if ((firstRow >= dimension) || (secondRow >= dimension)) {
-            throw IndexOutOfBounds;
+            throw new IndexOutOfBoundsException("Error adding row");
         }
 
         for (int i = 0; i < 2 * dimension; i++) {
