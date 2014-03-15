@@ -1,5 +1,7 @@
 /**
  * MatrixWorkerWriter.java
+ *    Checks the buffer for inverted matrices and writes data back to client
+ *    that requested the inversion.
  *
  *  @author Christian Sherland
  *  @author Ethan Lusterman
@@ -33,8 +35,11 @@ public class MatrixWorkerWriter implements Runnable {
 
     @Override
     public void run() {
+
+        // Continue sending back data until all has been sent back
         for(int sentBack = 0; sentBack < matCount; sentBack++) {
             try {
+                // Check for data and send back if available
                 if(!matBuffer.isEmpty()) {
                     Matrix sendBack = matBuffer.get(0);
                     matBuffer.remove(0);
@@ -48,8 +53,12 @@ public class MatrixWorkerWriter implements Runnable {
             }
         }
 
+        // Sleep before exiting to ensure that all data returns to client
         try {
             Thread.sleep(5000);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            LOG.error("Thread.sleep(5000) failed.")
+        }
+        
     }
 }
