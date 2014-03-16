@@ -34,12 +34,12 @@ public class MatrixClientWriter implements Runnable {
     public void run() {
         try {
             // Open input file and stream to server
-            File[] files = new File(inFile);
+            File files = new File(inFile);
             ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
 
             // Write data to server
-            for (int i = 0; i < files.length; i++) {
-                Matrix inputMat = new Matrix();
+            for (int i = 0; i < 1; i++) {
+                Matrix inputMat = new Matrix(new int[2]);
                 output.writeObject(inputMat);
             }
 

@@ -52,14 +52,14 @@ public class MatrixServer {
 
         // Listen for client connections
         try {
-            ServerSocket serverSocket = new ServerSocket(CLIENTPORT);
+            ServerSocket serverSocket = new ServerSocket(CLIENT_PORT);
             LOG.info("Listening for new client connections.");
             while(true) {
                 Socket socket = serverSocket.accept();
                 LOG.info("Accepted new client connection.");
 
                 // Handle new client connection in a thread
-                executorPool.execute(new MatrixWorker(socket));
+                executorPool.execute(new MatrixServerWorker(socket));
             }
         } catch (IOException e) {
             LOG.fatal("ServerSocket not functional.");

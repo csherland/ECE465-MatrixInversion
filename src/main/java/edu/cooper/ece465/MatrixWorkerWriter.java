@@ -57,7 +57,7 @@ public class MatrixWorkerWriter implements Runnable {
         try {
             Thread.sleep(5000);
         } catch (Exception e) {
-            LOG.error("Thread.sleep(5000) failed.")
+            LOG.error("Thread.sleep(5000) failed.");
         }
 
     }

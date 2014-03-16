@@ -65,8 +65,8 @@ public class MatrixClient {
             Socket socket = new Socket(histServerName, histServerPort);
 
             // Start reader and writer
-            Thread matWriter = new Thread(new MatrixClientWriter(socket, INPUT_DIRECTORY));
-            Thread matReader = new Thread(new MatrixClientReader(socket, OUTPUT_DIRECTORY, numImgs));
+            Thread matWriter = new Thread(new MatrixClientWriter(socket, INPUT_FILE));
+            Thread matReader = new Thread(new MatrixClientReader(socket, OUTPUT_FILE));
             matWriter.start();
             matReader.start();
 

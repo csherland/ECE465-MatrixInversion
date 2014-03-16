@@ -34,7 +34,7 @@ public class MatrixClientReader implements Runnable {
     public void run() {
         try {
             // Create output file
-            File file = new File(outputFile);
+            File file = new File(outFile);
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -43,7 +43,7 @@ public class MatrixClientReader implements Runnable {
             LOG.info("Waiting for inverted matrices");
             ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 
-            for (int i = 0; i < numImgs; i++) {
+            for (int i = 0; i < 1; i++) {
                 // Get result and write output
                 Matrix invertedMat = (Matrix) input.readObject();
 
