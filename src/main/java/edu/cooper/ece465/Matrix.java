@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 public class Matrix implements Serializable {
 
     private int dimension;
+    private int matrixIDNumber;
     private double matrix[][];
     private static Log LOG = LogFactory.getLog(LoadBalancer.class);
 
@@ -62,12 +63,21 @@ public class Matrix implements Serializable {
      * @param col    The column of the requested element
      * @return       The element in the specified row and column
      */
-    public double retrieve(int row, int col) {
+    public double getElement(int row, int col) {
         if ((row > dimension) || (col > dimension)) {
             throw new IndexOutOfBoundsException("Error retriving element.");
         }
 
         return matrix[row][col];
+    }
+
+    /**
+     * Returns the dimension property of the matrix object
+     *
+     * @return     The dimension property of this class
+     */
+    public int getDimension() {
+        return dimension;
     }
 
     /**
@@ -78,7 +88,6 @@ public class Matrix implements Serializable {
      * @param firstRow     The first row to swap
      * @param secondRow    The second row to swap
      */
-    // Swap two rows in the matrix
     public void swapRow(int firstRow, int secondRow) {
         if ((firstRow >= dimension) || (secondRow >= dimension)) {
             throw new IndexOutOfBoundsException("Error swapping rows.");

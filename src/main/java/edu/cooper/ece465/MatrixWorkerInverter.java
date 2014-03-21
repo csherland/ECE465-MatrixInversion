@@ -16,22 +16,23 @@ package edu.cooper.ece465;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import java.util.ArrayList;
 
 public class MatrixWorkerInverter implements Runnable {
 
     private Matrix matrix;
     private int dimension;
+    private ArrayList<Matrix> matBuffer;
     private static final int THREADS = 4;
     private static final int UPPER_TRIANGULAR = 0;
     private static final int GAUSS_JORDAN_ELIMINATE = 1;
     private static Log LOG = LogFactory.getLog(MatrixWorkerInverter.class);
 
-    public MatrixWorkerInverter(Matrix matrix, int dimension) {
+    public MatrixWorkerInverter(Matrix matrix, ArrayList<Matrix> matBuffer) {
         LOG.info("New MatrixWorkerInverter created.");
         this.matrix = matrix;
-        this.dimension = dimension;
+        this.dimension = matrix.getDimension();
+        this.matBuffer = matBuffer;
     }
 
     /**
@@ -55,13 +56,13 @@ public class MatrixWorkerInverter implements Runnable {
 
         // Make the matrix upper triangular
         for (int pivot = 0; pivot < dimension; pivot++) {
-            double pivotValue = matrix.retrieve(pivot, pivot);
+            double pivotValue = matrix.getElement(pivot, pivot);
             int swappableRow  = 1 + pivot;
 
             // Make sure the pivotValue is non-zero, swap rows until this is the case
             while (pivotValue == 0) {
                 matrix.swapRow(pivot, swappableRow);
-                pivotValue = matrix.retrieve(pivot, pivot);
+                pivotValue = matrix.getElement(pivot, pivot);
                 swappableRow++;
             }
 
@@ -101,6 +102,8 @@ public class MatrixWorkerInverter implements Runnable {
             }
 
             joinThreads(listThreads); // Wait for all threads to complete
+
+            matBuffer.add(matrix);
         }
     }
 }

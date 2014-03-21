@@ -34,9 +34,9 @@ public class InverterThread implements Runnable {
     public void run() {
 
         // Accomplishes reduction to upper triangular or lower triangluar based upon input
-        if (executionMethod == UPPER_TRIANGULAR) {            
+        if (executionMethod == UPPER_TRIANGULAR) {
             for (int row = initialRow; row < dimension; row += THREADS) {
-                double leadValue = matrix.retrieve(row, pivot);
+                double leadValue = matrix.getElement(row, pivot);
                 if (leadValue != 0) {
                     matrix.addRow(row, pivot, (leadValue * -1));
                 }
@@ -44,7 +44,7 @@ public class InverterThread implements Runnable {
 
         } else {
             for (int row = initialRow; row >= 0; row -= THREADS) {
-                double tailValue = matrix.retrieve(row, pivot);
+                double tailValue = matrix.getElement(row, pivot);
                 if (tailValue != 0) {
                     matrix.addRow(row, pivot, (tailValue * -1));
                 }
