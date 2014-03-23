@@ -1,7 +1,7 @@
 ECE465-MatrixInversion
 ======================
 Distributed matrix inversion project for ECE 465 - Cloud Computing at Cooper Union, Spring 2014.
-Allows a client to specify a file of matrices to be proccessed by matrix inversion servers. Format
+Allows a client to specify a file of matrices to be processed by matrix inversion servers. Format
 for input files is specified below, and script to generate test data is included in this repo.
 
 Features an application layer load balancer to determine the best server for a client to connect to
@@ -13,6 +13,9 @@ The major components of this project can be divided into three parts - the matri
 balancer and the matrix inversion server. All of these are meant to run simultaneously and communicate
 using network sockets. As such, these can all be run on one machine, or distributed across multiple
 machines.
+
+Additionally, some useful scripts for deployment and data generation can be found in the scripts
+directory, and are discussed further below.
 
 Usage
 -----
@@ -38,7 +41,7 @@ Configuration
 Project properties (data source/output, port numbers, etc.) can be configured in the project.properties
 file located in src/main/resources. The properties required by this project are as follows:
 
-On the load balancer, the client port is the port on which the LB will listen for incoming connections
+On the load balancer, the client port is the port on which the balancer will listen for incoming connections
 from clients. This is also the connection on which it will respond to clients with a histogram server
 assignment. The host port is the port on which the load balancer listens for new histogram worker instances.
 The hostname is the ip address of url at which the load balancer can be reached by external clients or
