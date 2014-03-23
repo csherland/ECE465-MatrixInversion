@@ -35,7 +35,21 @@ At this point, image clients will be able to successfully connect and retrieve d
 
 Configuration
 -------------
+Project properties (data source/output, port numbers, etc.) can be configured in the project.properties
+file located in src/main/resources. The properties required by this project are as follows:
 
+On the load balancer, the client port is the port on which the LB will listen for incoming connections
+from clients. This is also the connection on which it will respond to clients with a histogram server
+assignment. The host port is the port on which the load balancer listens for new histogram worker instances.
+The hostname is the ip address of url at which the load balancer can be reached by external clients or
+servers (localhost if this project is run locally).
+
+On the matrix server, the client port is the port on which the server will listen for incoming client
+connections. If this project is run locally, this port must be different than the client port for
+the load balancer.
+
+The matrix source/output files are relatively self-explanatory and should be specified relative to
+the base directory of this project.
 
 Test Data
 ---------
@@ -56,7 +70,9 @@ The results of our testing are shown in the graphs below.
 
 Deployment
 ----------
-A fast deploy script is included with this project in the scripts directory.
+A fast deploy script is included with this project in the scripts directory. This features deployment
+to either Cooper Union ICE Lab servers (requires an ICE account) or AWS (requires an ssh token).
+Further details are described within the script comments.
 
 Authors
 -------
