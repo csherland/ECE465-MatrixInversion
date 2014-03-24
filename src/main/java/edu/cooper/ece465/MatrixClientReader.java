@@ -15,6 +15,7 @@ package edu.cooper.ece465;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -25,7 +26,7 @@ public class MatrixClientReader implements Runnable {
     private static Log LOG = LogFactory.getLog(MatrixClientReader.class);
 
     public MatrixClientReader(Socket s, String outputFile) {
-        LOG.info("Constructing new MatrixClientReader");
+        LOG.info("Constructing new MatrixClientReader.");
         this.socket  = s;
         this.outFile = outputFile;
     }
@@ -38,17 +39,26 @@ public class MatrixClientReader implements Runnable {
             if (!file.exists()) {
                 file.createNewFile();
             }
+            BufferedWriter bw = new BufferedWriter(new FileWriter(outFile));
 
             // Wait for inverted matrices from Server
-            LOG.info("Waiting for inverted matrices");
+            LOG.info("Waiting for inverted matrices.");
             ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
 
             for (int i = 0; i < 1; i++) {
                 // Get result and write output
                 Matrix invertedMat = (Matrix) input.readObject();
+                int matID = invertedMat.getID();
+                int dim   = invertedMat.getDimension();
+                int[] mat = invertedMat.getMatrixArray();
 
+                // Write results to output file
+                bw.write(matID + " " + dim + " " + Arrays.toString(mat));
+                LOG.info("Wrote matrix" + i + "of " + 10 + " matrices to " + outFile);
             }
 
+            bw.close();
+            LOG.info("Successfully wrote all matrices to " + outFile);
         } catch (IOException e) {
             LOG.fatal("IO exception", e);
             System.exit(1);

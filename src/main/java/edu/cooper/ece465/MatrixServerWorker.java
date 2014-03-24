@@ -58,7 +58,7 @@ public class MatrixServerWorker implements Runnable {
             // Read in all expected images
             for (int i = 0; i < matrixCount; i++) {
                 Matrix receivedMatrix = (Matrix) input.readObject();
-                LOG.info("Received image " + (i+1) + " from client.");
+                LOG.info("Received matrix " + (i+1) + " from client.");
                 Runnable inverterThread = new MatrixWorkerInverter(receivedMatrix, matBuffer);
                 threads.add(new Thread(inverterThread));
                 threads.get(i).start();
