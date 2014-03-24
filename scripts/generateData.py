@@ -47,14 +47,14 @@ if __name__ == "__main__":
 
     # Generate matrices
     for mat_num in range(num_mats):
-        print "Generating matrix " + mat_num + " of " + num_mats
+        print "Generating matrix " + str(mat_num) + " of " + str(num_mats)
 
         # Calculate random dimension
         dimension = random.randint(500,1000)
 
         out.write(str(mat_num) + " " + str(dimension) + " ")
-        for i in range(dim):
-            for j in range(dim):
+        for i in range(dimension):
+            for j in range(dimension):
                 out.write(str(random.randint(400, 3000)) + " ")
 
         out.write('\n')
