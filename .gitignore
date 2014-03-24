@@ -1,5 +1,8 @@
 *.class
 
+# data
+*.txt
+
 # Package Files #
 *.jar
 *.war
