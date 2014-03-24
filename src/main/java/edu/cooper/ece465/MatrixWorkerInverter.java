@@ -56,6 +56,7 @@ public class MatrixWorkerInverter implements Runnable {
 
         // Make the matrix upper triangular
         for (int pivot = 0; pivot < dimension; pivot++) {
+            LOG.info("Making upper triangular. Pivot: " + pivot);
             double pivotValue = matrix.getElement(pivot, pivot);
             int swappableRow  = 1 + pivot;
 
@@ -88,6 +89,7 @@ public class MatrixWorkerInverter implements Runnable {
 
         // Make the upper triangular matrix lower triangular (diagonal)
         for (int pivot = dimension - 1; pivot > 0; pivot--) {
+            LOG.info("Making lower triangular. Pivot: " + pivot);
             // This time we know the pivot values as we have defined them are 1, can skip some steps.
             int innerBlockDim = pivot;
             int numberThreads = (innerBlockDim < THREADS) ? THREADS : innerBlockDim;
