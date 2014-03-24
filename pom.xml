@@ -272,9 +272,9 @@
                                 <argument>-Dlog4j.debug</argument>
                                 <argument>-classpath</argument>
                                 <classpath/>
-                                <mainClass>edu.cooper.ece465.MatrixServer</mainClass>
+                                <mainClass>edu.cooper.ece465.MatrixClient</mainClass>
                                 <argument>${loadBalancer.hostName}</argument>
-                                <argument>${loadBalancer.serverPort}</argument>
+                                <argument>${loadBalancer.clientPort}</argument>
                                 <argument>${matrixClient.inputFile}</argument>
                                 <argument>${matrixClient.outputFile}</argument>
                             </arguments>
@@ -360,6 +360,7 @@
                 </resources>
             </build>
         </profile>
+
     </profiles>
 
 

@@ -40,7 +40,7 @@ public class MatrixServerWorker implements Runnable {
 
             // Determine number of images to accept
             int matrixCount = (Integer) input.readObject();
-            LOG.info("Expecting " + matrixCount + " images from client.");
+            LOG.info("Expecting " + matrixCount + " matrices from client.");
 
             // Synchronized buffer to store data in
             ArrayList<Matrix> matBuffer = new ArrayList<Matrix>();
@@ -61,14 +61,13 @@ public class MatrixServerWorker implements Runnable {
                 LOG.info("Received matrix " + (i+1) + " from client.");
                 Runnable inverterThread = new MatrixWorkerInverter(receivedMatrix, matBuffer);
                 threads.add(new Thread(inverterThread));
-                threads.get(i).start();
+                threads.get(i+1).start();
             }
 
             // Wait for everything to finish before ending communication
             for (Thread thread : threads) {
                 thread.join();
             }
-            writerThread.join();
 
             socket.close();
             LOG.info("Finished equalizing images.");

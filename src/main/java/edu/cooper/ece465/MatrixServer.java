@@ -28,15 +28,15 @@ public class MatrixServer {
 
     public static void main(String[] args){
 
-        if (args.length != 2) {
+        if (args.length != 3) {
             LOG.fatal("Usage: java MatrixServer <load balancer hostname> <load balancer port> <client port number>");
             System.exit(1);
         }
 
         // Listening ports
         final String LB_NAME  = args[0];
-        final int LB_PORT     = Integer.parseInt(args[2]);
-        final int CLIENT_PORT = Integer.parseInt(args[1]);
+        final int LB_PORT     = Integer.parseInt(args[1]);
+        final int CLIENT_PORT = Integer.parseInt(args[2]);
 
         // Setup the thread pool
         RejectedExecutionHandlerImpl rejectionHandler = new RejectedExecutionHandlerImpl();
