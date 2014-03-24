@@ -1,7 +1,8 @@
 #!/bin/bash
 #
 # Christian Sherland
-# 3-14-13
+# Ethan Lusterman
+# 3-23-14
 #
 # deploy.sh
 #   A simple shell script to deploy and run this project on servers that
@@ -16,40 +17,35 @@
 #   Script also assumes that it is run from the root directory of the project.
 #
 #   Sample usage:
-#       ./scripts/deploy.sh <location> <username/ssh key file>
+#       ./scripts/deploy.sh ice
 #
+
+# CONFIGURATION
+source scripts/config.sh
+mvn_cmd='mvn clean compile exec:exec -P '
 
 # Function to deploy to ice servers
 deployICE() {
     # Running the load balancer
     echo "Running the load balancer";
-    ssh -p 31415 user@ice01.ee.cooper.edu "\
-        cd /path/to/remote/project/folder/;\
-        git pull;
-    mvn clean compile exec:exec -P loadBalancer;
-    exit;";
+    load_bal+='git pull;./scripts/loadBalancer.sh </dev/null >out.log 2>&1 &'
+    echo $load_bal
     echo "Load balancer now running.";
 
     # Running the first matrix server
-    echo "Running matrix server 1";
-    ssh -p 31415 user@ice03.ee.cooper.edu "\
-        cd /path/to/remote/project/folder/;\
-        git pull;
-    mvn clean compile exec:exec -P matrixServer;
-    exit;";
-    echo "Matrix server 1 is now running.";
+    #echo "Running matrix server 1";
+    #server1+='./scripts/matrixServer.sh </dev/null >out.log 2>&1 &'
+    #$server1
+    #echo "Matrix server 1 is now running.";
 
-    # Running the second matrix server
-    echo "Running matrix server 2";
-    ssh -p 31415 user@ice03.ee.cooper.edu "\
-        cd /path/to/remote/project/folder/;\
-        git pull;
-    mvn clean compile exec:exec -P matrixServer;
-    exit;";
-    echo "Matrix server 2 is now running.";
-
-    echo "Project successfully deployed to ICE servers.";
-    echo "Ready to accept connections from client.";
+#    # Running the second matrix server
+#    echo "Running matrix server 2";
+#    server2+=$mvn'matrixServer &;exit;'
+#    $server2
+#    echo "Matrix server 2 is now running.";
+#
+#    echo "Project successfully deployed to ICE servers.";
+#    echo "Ready to accept connections from client.";
 }
 
 # Function to deploy to aws
@@ -85,18 +81,18 @@ deployAWS() {
     echo "Ready to accept connections from client.";
 }
 
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <location> <username/ssh key>";
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <location>";
     exit 1;
 fi
 
 # Make sure everything is up to date in git
 # (You should really do this yourself though)
-echo "Ensuring that project is up to date in git";
-git add -A;
-git commit -m "Automated Deploy";
-git push origin master;
-echo "Project update to date in git.";
+#echo "Ensuring that project is up to date in git";
+#git add -A;
+#git commit -m "Automated Deploy";
+#git push origin master;
+#echo "Project up to date in git.";
 
 if [ "$1" = "ice" ]; then
     deployICE;
