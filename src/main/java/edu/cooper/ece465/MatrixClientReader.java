@@ -42,6 +42,7 @@ public class MatrixClientReader implements Runnable {
                 file.createNewFile();
             }
             BufferedWriter bw = new BufferedWriter(new FileWriter(outFile));
+            bw.write(numMats);
 
             // Wait for inverted matrices from Server
             LOG.info("Waiting for inverted matrices.");
@@ -61,7 +62,7 @@ public class MatrixClientReader implements Runnable {
 
             bw.close();
             LOG.info("Successfully wrote all matrices to " + outFile);
-            
+
         } catch (IOException e) {
             LOG.fatal("IO exception", e);
             System.exit(1);

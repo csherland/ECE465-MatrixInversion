@@ -24,15 +24,37 @@
 #
 #   The number of matrices (<num_mats>) generated will be specified by the user.
 #
+#    The output file location can be specified by <output file>
+#
+#    Further work could allow the user to specify dimenion range and number range
+#    for randomly generated data
+#
 
 import sys
+import random
 
 if __name__ == "__main__":
 
-    if len(sys.argv) is not 2:
-        print "Usage Error: ./generateData <num_mats>"
+    if len(sys.argv) is not 3:
+        print "Usage Error: ./generateData <num_mats> <output file>"
         sys.exit(1)
 
     num_mats = int(sys.argv[1])
 
+    # Open output file
+    out = open(sys.argv[2], 'w')
+    out.write(str(num_mats) + '\n')
 
+    # Generate matrices
+    for mat_num in range(num_mats):
+        print "Generating matrix " + mat_num + " of " + num_mats
+
+        # Calculate random dimension
+        dimension = random.randint(500,1000)
+
+        out.write(str(mat_num) + " " + str(dimension) + " ")
+        for i in range(dim):
+            for j in range(dim):
+                out.write(str(random.randint(400, 3000)) + " ")
+
+        out.write('\n')
