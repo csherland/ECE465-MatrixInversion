@@ -81,6 +81,31 @@ public class Matrix implements Serializable {
     }
 
     /**
+     *
+     *
+     */
+    public int getID() {
+        return matrixIDNumber;
+    }
+
+    /**
+     * Returns the matrix con
+     *
+     *
+     */
+     public int[] getMatrixArray() {
+        int[] matArray = new matArray[dimension*dimension];
+
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                matArray[i+j] = matrix[i][j];
+            }
+        }
+
+         return matArray;
+     }
+
+    /**
      * Swaps the rows specified by firstRow and secondRow. Throws an IndexOutOfBounds
      * exception if either firstRow or secondRow is not within the bounds of the
      * matrix

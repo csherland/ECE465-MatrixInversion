@@ -33,15 +33,31 @@ public class MatrixClientWriter implements Runnable {
     @Override
     public void run() {
         try {
-            // Open input file and stream to server
-            File files = new File(inFile);
-            ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+            // Read the number of matrices to be equalized and send to server
+            File file = new File(inFile);
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line = br.readLine();
 
-            // Write data to server
-            for (int i = 0; i < 1; i++) {
-                Matrix inputMat = new Matrix(new int[2]);
-                output.writeObject(inputMat);
+            // Open input file and stream to server
+            ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+            LOG.info("Writing matrices to server.");
+
+            // Read the rest of the lines
+            while ((line = br.readLine()) != null) {
+                // Get matrix data
+                String[] data = line.split(" ");
+                int[] matrixData = new int[data.length];
+                for (int i = 0; i < data.length; i++) {
+                    matrixData[i] = Integer.parseInt(data[i]);
+                }
+
+                // Send matrix to server
+                output.writeObject(matrixData);
+                LOG.info("Sent matrix " + i + " of " + line + " to server.");
             }
+
+            br.close();
+            LOG.info("Successfully sent all matrices to server.");
 
         } catch (IOException e) {
             LOG.fatal("IO exception", e);

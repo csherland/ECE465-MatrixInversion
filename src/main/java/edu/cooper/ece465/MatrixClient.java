@@ -27,7 +27,7 @@ public class MatrixClient {
         final String INPUT_FILE  = args[2];
         final String OUTPUT_FILE = args[3];
         final String LOAD_BALANCER_NAME = args[0];
-        final int LOAD_BALANCER_PORT    = Integer.parseInt(args[1]);
+        final int    LOAD_BALANCER_PORT = Integer.parseInt(args[1]);
 
         LOG.info("Image client running with load balancer name:\t "
                 + LOAD_BALANCER_NAME + "\n\t\t port: "
