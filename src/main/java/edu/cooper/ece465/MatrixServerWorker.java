@@ -50,7 +50,7 @@ public class MatrixServerWorker implements Runnable {
             ArrayList<Thread> threads = new ArrayList<Thread>();
 
             // Make the send back thread
-            MatrixWorkerWriter writer = new MatrixWorkerWriter(output, matrixCount, matBuffer);
+            MatrixWorkerWriter writer = new MatrixWorkerWriter(output, matrixCount, matBuffer, matrixCount);
             Thread writerThread = new Thread(writer);
             threads.add(writerThread);
             writerThread.start();

@@ -21,25 +21,31 @@ import org.apache.commons.logging.LogFactory;
 
 public class MatrixWorkerWriter implements Runnable {
 
-    private ObjectOutputStream output;
+    private int numMats;
     private int matCount;
+    private ObjectOutputStream output;
     private ArrayList<Matrix> matBuffer;
     private static Log LOG = LogFactory.getLog(MatrixWorkerWriter.class);
 
-    public MatrixWorkerWriter(ObjectOutputStream o, int count, ArrayList<Matrix> matBuffer) {
+    public MatrixWorkerWriter(ObjectOutputStream o, int count, ArrayList<Matrix> matBuffer, int numMats) {
         LOG.info("New MatrixWorkerWriter created.");
         this.output = o;
         this.matCount  = count;
         this.matBuffer = matBuffer;
+        this.numMats = numMats;
     }
 
     @Override
     public void run() {
 
-        // Continue sending back data until all has been sent back
-        for(int sentBack = 0; sentBack < matCount; sentBack++) {
-            try {
-                // Check for data and send back if available
+        try {
+            // Send back number of matrices
+            output.writeObject(numMats);
+
+            // Continue sending back data until all has been sent back
+            for(int sentBack = 0; sentBack < matCount; sentBack++) {
+
+                    // Check for data and send back if available
                 if(!matBuffer.isEmpty()) {
                     Matrix sendBack = matBuffer.get(0);
                     matBuffer.remove(0);
@@ -48,9 +54,10 @@ public class MatrixWorkerWriter implements Runnable {
                 } else {
                     Thread.sleep(1000);
                 }
-            } catch (Exception e) {
-                LOG.error("Unexpected exception", e);
             }
+            
+        } catch (Exception e) {
+            LOG.error("Unexpected exception", e);
         }
 
         // Sleep before exiting to ensure that all data returns to client

@@ -21,16 +21,14 @@ import org.apache.commons.logging.LogFactory;
 
 public class MatrixClientReader implements Runnable {
 
-    private int numMats;
     private Socket socket;
     private String outFile;
     private static Log LOG = LogFactory.getLog(MatrixClientReader.class);
 
-    public MatrixClientReader(Socket s, String outputFile, int numMats) {
+    public MatrixClientReader(Socket s, String outputFile) {
         LOG.info("Constructing new MatrixClientReader.");
         this.socket  = s;
         this.outFile = outputFile;
-        this.numMats = numMats;
     }
 
     @Override
@@ -42,11 +40,13 @@ public class MatrixClientReader implements Runnable {
                 file.createNewFile();
             }
             BufferedWriter bw = new BufferedWriter(new FileWriter(outFile));
-            bw.write(numMats);
 
             // Wait for inverted matrices from Server
             LOG.info("Waiting for inverted matrices.");
             ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+            int numMats = (Integer) input.readObject();
+            bw.write(numMats);
+
 
             for (int i = 0; i < numMats; i++) {
                 // Get result and write output
