@@ -37,12 +37,15 @@ public class MatrixClientWriter implements Runnable {
             File file = new File(inFile);
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = br.readLine();
+            int numMats = Integer.parseInt(line);
 
             // Open input file and stream to server
             ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+            output.writeObject(numMats);
             LOG.info("Writing matrices to server.");
 
             // Read the rest of the lines
+            int count = 0;
             while ((line = br.readLine()) != null) {
                 // Get matrix data
                 String[] data = line.split(" ");
@@ -52,8 +55,8 @@ public class MatrixClientWriter implements Runnable {
                 }
 
                 // Send matrix to server
-                output.writeObject(matrixData);
-                LOG.info("Sent matrix " + i + " of " + line + " to server.");
+                output.writeObject(new Matrix(matrixData));
+                LOG.info("Sent matrix " + (count++) + " of " + numMats + " to server.");
             }
 
             br.close();

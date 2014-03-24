@@ -93,8 +93,8 @@ public class Matrix implements Serializable {
      *
      *
      */
-     public int[] getMatrixArray() {
-        int[] matArray = new matArray[dimension*dimension];
+     public double[] getMatrixArray() {
+        double[] matArray = new double[dimension*dimension];
 
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {

@@ -64,9 +64,16 @@ public class MatrixClient {
             LOG.info("Connecting to histogram server: " + histServerName + " on port: " + histServerPort);
             Socket socket = new Socket(histServerName, histServerPort);
 
+            // Determine number of mats
+            File file = new File(INPUT_FILE);
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line = br.readLine();
+            int numMats = Integer.parseInt(line);
+            br.close();
+
             // Start reader and writer
             Thread matWriter = new Thread(new MatrixClientWriter(socket, INPUT_FILE));
-            Thread matReader = new Thread(new MatrixClientReader(socket, OUTPUT_FILE));
+            Thread matReader = new Thread(new MatrixClientReader(socket, OUTPUT_FILE, numMats));
             matWriter.start();
             matReader.start();
 
