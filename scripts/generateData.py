@@ -36,13 +36,13 @@ import random
 if __name__ == "__main__":
 
     if len(sys.argv) is not 4:
-        print "Usage Error: ./generateData <num_mats> <mat_size> <output file>"
+        print "Usage Error: ./generateData <output_file> <num_mats> <mat_size>"
         sys.exit(1)
 
-    num_mats = int(sys.argv[1])
+    num_mats = int(sys.argv[2])
 
     # Open output file
-    out = open(sys.argv[3], 'w')
+    out = open(sys.argv[1], 'w')
     out.write(str(num_mats) + '\n')
 
     # Generate matrices
@@ -50,7 +50,7 @@ if __name__ == "__main__":
         print "Generating matrix " + str(mat_num) + " of " + str(num_mats)
 
         # Calculate random dimension
-        dimension = int(sys.argv[2]) #random.randint(500,1000)
+        dimension = int(sys.argv[3]) #random.randint(500,1000)
 
         out.write(str(mat_num) + " " + str(dimension) + " ")
         for i in range(dimension):
