@@ -28,14 +28,15 @@ public class Matrix implements Serializable {
 
     public Matrix(int data[]) {
         // Check that the data is of the correct format
-        if (data.length > 0 && (data.length - 1) == data[0] * data[0]) {
-            this.dimension = data[0];
+        if (data.length > 0 && (data.length - 2) == data[1] * data[1]) {
+            this.matrixIDNumber = data[0];
+            this.dimension = data[1];
             this.matrix = new double[dimension][2 * dimension];
 
             // Create the LEFT SECTION. Matrix to be inverted.
             for (int row = 0; row < dimension; row++) {
                 for (int column = 0; column < dimension; column++) {
-                    matrix[row][column] = data[((row * dimension) + column) + 1];
+                    matrix[row][column] = data[((row * dimension) + column) + 2];
                 }
             }
 
@@ -72,33 +73,34 @@ public class Matrix implements Serializable {
     }
 
     /**
-     * Returns the dimension property of the matrix object
-     *
-     * @return     The dimension property of this class
+     * @returns     The dimension property of the matrix object
      */
     public int getDimension() {
         return dimension;
     }
 
     /**
-     *
-     *
+     * @return    The matrix identification number
      */
     public int getID() {
         return matrixIDNumber;
     }
 
     /**
-     * Returns the matrix con
+     * Converts the matrix in this class back to the array input form expected
+     * in the class constructor and returns that.
      *
-     *
+     * @return    The matrix contained in this object as an array
      */
      public double[] getMatrixArray() {
-        double[] matArray = new double[dimension*dimension];
+        double[] matArray = new double[dimension*dimension+2];
 
+        matArray[0] = matrixIDNumber;
+        matArray[1] = dimensions;
+        
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
-                matArray[i+j] = matrix[i][j];
+                matArray[i+j+2] = matrix[i][j];
             }
         }
 

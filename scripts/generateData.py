@@ -50,7 +50,7 @@ if __name__ == "__main__":
         print "Generating matrix " + str(mat_num) + " of " + str(num_mats)
 
         # Calculate random dimension
-        dimension = random.randint(500,1000)
+        dimension = 4 #random.randint(500,1000)
 
         out.write(str(mat_num) + " " + str(dimension) + " ")
         for i in range(dimension):

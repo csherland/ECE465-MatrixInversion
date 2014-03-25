@@ -45,17 +45,20 @@ public class MatrixWorkerWriter implements Runnable {
             // Continue sending back data until all has been sent back
             for(int sentBack = 0; sentBack < matCount; sentBack++) {
 
-                    // Check for data and send back if available
-                if(!matBuffer.isEmpty()) {
-                    Matrix sendBack = matBuffer.get(0);
-                    matBuffer.remove(0);
-                    output.writeObject(sendBack);
-                    LOG.info("Sent back matrix" + (sentBack+1));
-                } else {
-                    Thread.sleep(1000);
+                // Check for data and send back if available
+                while (true) {
+                    if(!matBuffer.isEmpty()) {
+                        Matrix sendBack = matBuffer.get(0);
+                        matBuffer.remove(0);
+                        output.writeObject(sendBack);
+                        LOG.info("Sent back matrix" + (sentBack+1));
+                        break;
+                    } else {
+                        Thread.sleep(1000);
+                    }
                 }
             }
-            
+
         } catch (Exception e) {
             LOG.error("Unexpected exception", e);
         }

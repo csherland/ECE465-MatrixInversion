@@ -51,13 +51,11 @@ public class MatrixClientReader implements Runnable {
             for (int i = 0; i < numMats; i++) {
                 // Get result and write output
                 Matrix invertedMat = (Matrix) input.readObject();
-                int matID = invertedMat.getID();
-                int dim   = invertedMat.getDimension();
                 double[] mat = invertedMat.getMatrixArray();
 
                 // Write results to output file
-                bw.write(matID + " " + dim + " " + Arrays.toString(mat));
-                LOG.info("Wrote matrix" + i + "of " + numMats + " matrices to " + outFile);
+                bw.write(Arrays.toString(mat));
+                LOG.info("Wrote matrix " + i + " of " + numMats + " matrices to " + outFile);
             }
 
             bw.close();
