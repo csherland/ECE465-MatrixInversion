@@ -96,7 +96,7 @@ public class Matrix implements Serializable {
         double[] matArray = new double[dimension*dimension+2];
 
         matArray[0] = matrixIDNumber;
-        matArray[1] = dimensions;
+        matArray[1] = dimension;
         
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {

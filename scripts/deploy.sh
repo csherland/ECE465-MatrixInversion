@@ -28,8 +28,8 @@ mvn_cmd='mvn clean compile exec:exec -P '
 deployICE() {
     # Running the load balancer
     echo "Running the load balancer";
-    load_bal+='git pull;./scripts/loadBalancer.sh </dev/null >out.log 2>&1 &'
-    echo $load_bal
+    load_bal+='git pull;./scripts/loadBalancer.sh >/dev/null 2>&1; exit;'
+    $load_bal
     echo "Load balancer now running.";
 
     # Running the first matrix server
