@@ -14,6 +14,7 @@ package edu.cooper.ece465;
 
 import java.io.*;
 import java.net.*;
+import org.hyperic.sigar.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -63,18 +64,17 @@ public class MonitorThread implements Runnable {
                 LOG.info("Sending data to load balancer: " + hostname + " on port: " + portNumber);
 
                 // Determine current system load
-                OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
-                double load = osBean.getSystemLoadAverage();
+                Sigar s = new Sigar();
 
                 // Send system information to load balancer
                 Socket socket = new Socket(InetAddress.getByName(this.hostname), this.portNumber);
-                ServerStatus data = new ServerStatus(socket.getLocalAddress().getHostName(), this.clientPortNumber, load);
+                ServerStatus data = new ServerStatus(socket.getLocalAddress().getHostName(), this.clientPortNumber, s.getLoadAverage());
                 ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
                 oos.writeObject(data);
 
                 // Clost up connection
                 oos.close();
-                Thread.sleep(seconds*1000);
+                Thread.sleep(seconds*10000);
             } catch (Exception e) {
                 LOG.error("Could not communicate with master server.", e);
             }

@@ -374,6 +374,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Sigar dependency -->
+        <dependency>
+            <groupId>org.hyperic</groupId>
+            <artifactId>sigar</artifactId>
+            <version>1.6.5.132</version>
+        </dependency>
+
         <!--  Gson dependency -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
